@@ -1,3 +1,4 @@
-export * from './Modal'
-export * from './Item'
-export * from './ItemDetails'
+export * from './UIButton'
+export * from './UITitle'
+export * from './UIInput'
+export * from './UILoader'

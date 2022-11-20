@@ -1,6 +1,7 @@
 import React from 'react'
 import { observer } from 'mobx-react';
-import { IMinifig } from "../../models/";
+import { ItemDetails, UITitle, UIInput, UIButton } from "../../components"
+import { IMinifig } from "../../types";
 
 
 interface ITabListProps {
@@ -9,37 +10,44 @@ interface ITabListProps {
 };
 
 export const Order: React.FC<ITabListProps> = observer(({form, item}) => {
-  console.log(item)
-  const mockedItem = {
-    last_modified_dt: "2020-04-30T06:04:42.346838Z",
-    name: "Harry Potter, Open Dark Blue Jacket over White Shirt, Dark Bluish Gray Legs",
-    num_parts: 4,
-    set_img_url:"https://cdn.rebrickable.com/media/sets/fig-000029/60572.jpg",
-    set_num: "fig-000029",
-    set_url: "https://rebrickable.com/minifigs/fig-000029/harry-potter-open-dark-blue-jacket-over-white-shirt-dark-bluish-gray-legs/"
-}
+
   return (
-    <div className="p-4 container mx-auto flex justify-center items-center min-h-screen">
-      <form className="bg-gray-500">
-        <h1>Order</h1>
-        <div>
-          <div className="col-span-6 sm:col-span-3">
-            <label
-              htmlFor={form.$('name').id}
-              className="block text-sm font-medium text-gray-700"
-            >
-              First name
-            </label>
-            <input
-              type="text"
-              name="first-name"
-              id={form.$('name').id}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-            />
-          </div>
+    <div className="p-4 container mx-auto flex items-center min-h-screen max-w-6xl flex-col sm:flex-row">
+      <form className="w-full sm:w-2/3 sm:pr-12 order-2 sm:order-1">
+        <UITitle text="Shiping details"/>
+        <div className="grid sm:gap-4 sm:grid-cols-2">
+          <UIInput field={form.$('name')}/>
+          <UIInput field={form.$('surname')}/>
+        </div>
+        <UIInput field={form.$('phone')}/>
+        <UIInput field={form.$('email')}/>
+        <UIInput type="date" field={form.$('dob')}/>
+        <UIInput field={form.$('adress')}/>
+        <UIInput field={form.$('city')}/>
+        <div className="gridsm:gap-4 sm:grid-cols-2">
+          <UIInput field={form.$('state')}/>
+          <UIInput field={form.$('zip')}/>
+        </div>
+        <div className="mt-5">
+          <UIButton
+            label="submit"
+            disabled={form.hasError}
+            onClick={(e) => form.onSubmit(e)}
+          />
         </div>
       </form>
-      <div></div>
+      <div className="w-full sm:w-1/3 rounded-xl mb-8 sm:mb-0 border border-slate-300 order-1 sm:order-2">
+        <ItemDetails
+          name={item.name}
+          numParts={item.num_parts}
+          setImgUrl={item.set_img_url}
+          setNum={item.set_num}
+          setUrl={item.set_url}
+          parts={item.parts}
+          partsMessage={item.partsMessage}
+          column
+        />
+      </div>
     </div>
   )
 })

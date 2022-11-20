@@ -3,11 +3,12 @@ import dvr from 'mobx-react-form/lib/validators/DVR';
 import validatorjs from 'validatorjs';
 
 validatorjs.register('phone', (value: string) => 
-  value.match(/^\d{3}-\d{3}-\d{4}$/),
-  'The :attribute phone number is not in the format XXX-XXX-XXXX.'
+  value.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im),
+  'Incorrect phone number'
 );
-
-const plugins = { dvr: dvr(validatorjs) };
+const plugins = {
+  dvr: dvr(validatorjs),
+};
 
 const fields = [
   {
@@ -25,7 +26,7 @@ const fields = [
   {
     name: 'phone',
     label: 'Phone Number',
-    placeholder: 'XXX-XXX-XXXX',
+    placeholder: 'Phone Number',
     rules: 'required|phone'
   },
   {
@@ -72,15 +73,7 @@ const fields = [
   }
 ];
 
-const hooks = {
-  onSuccess(form: any) {
-    console.log('Form Values!', form.values());
-  },
-  onError(form: any) {
-    console.log('All form errors', form.errors());
-  }
-};
 
-export const OrderForm = () => {
+export const OrderForm = (hooks: any) => {
   return new Form({ fields }, { plugins, hooks });
 }

@@ -1,53 +1,88 @@
 import React from 'react';
 import { observer } from "mobx-react";
 import { useStore } from "../stores/";
-import { GiftSet } from "../components/";
-import { getMinifigs } from '../models'
-import { Modal, ItemDetails } from "../components"
+import { GiftSet, UILoader, Modal, ItemDetails } from "../components/";
+import { getMinifigs, getParts, isExistParts, getMultipleRandom } from '../models'
 
 export const GiftSetContainer: React.FC = observer(() => {
+    // Page state
     const [open, setOpen] = React.useState(false)
-    const [title, setTitle] = React.useState('Loading ...')
-    const store = useStore();
-    const {items, setItems, selectedItemID, setSelectedItemID, focusedItemID, setFocusedItemID} = store;
-    const focusedItem = items.find(item => item.set_num === focusedItemID)
+    const [loading, setLoading] = React.useState(true)
+    const [message, setMessage] = React.useState('')
 
+    const store = useStore();
+    const {
+        items,
+        setItems,
+        setItemsParts,
+        selectedItemID,
+        setSelectedItemID,
+        openedItemID,
+        setOpenedItemID,
+    } = store;
+    const openedItem = items.find(item => item.set_num === openedItemID)
+    
     React.useEffect(() => {
         (async () => {
             const res = await getMinifigs()
             if (res.message) {
-                setTitle(res.message)
+                setMessage(res.message)
+                setLoading(false)
             } else {
-                setTitle('Choose your minifig')
-                setItems(res.minifigs)
+                setItems(getMultipleRandom(res.minifigs, 3))
+                setLoading(false)
             }
         })()
     }, [setItems]);
+    
+    React.useEffect(() => {
+        if (selectedItemID) {
+            if (!isExistParts(items, selectedItemID)) {
+                (async () => {
+                    setLoading(true)
+                    const res = await getParts(selectedItemID)
+                    setItemsParts(selectedItemID, res.parts, res.message)
+                    setLoading(false)
+                })()
+            }
+        }
+    }, [selectedItemID, setItemsParts, items]);
 
-    const setFocusHendler = (val: string) => {
-        setFocusedItemID(val)
-        setOpen(true)
+    const openDetails = async (set_num: string) => {
+        setOpenedItemID(set_num)
+        if (!isExistParts(items, set_num)) {
+            setLoading(true)
+            const res = await getParts(set_num)
+            setItemsParts(set_num, res.parts, res.message)
+            setLoading(false)
+            setOpen(true)
+        } else {
+            setOpen(true)
+        }
     }
-
 
     return (
         <>
+            <UILoader open={loading} />
             <GiftSet
-                title={title}
                 items={items}
                 selectedItemID={selectedItemID}
                 setSelectedItemID={setSelectedItemID}
-                setFocusedItemID={setFocusHendler}
+                openDetails={openDetails}
+                loading={loading}
+                message={message}
             />
             <Modal open={open} setOpen={setOpen}>
                 {
-                    focusedItem ? 
+                    openedItem ? 
                         <ItemDetails
-                            name={focusedItem.name}
-                            numParts={focusedItem.num_parts}
-                            setImgUrl={focusedItem.set_img_url}
-                            setNum={focusedItem.set_num}
-                            setUrl={focusedItem.set_url}
+                            name={openedItem.name}
+                            numParts={openedItem.num_parts}
+                            setImgUrl={openedItem.set_img_url}
+                            setNum={openedItem.set_num}
+                            setUrl={openedItem.set_url}
+                            parts={openedItem.parts}
+                            partsMessage={openedItem.partsMessage}
                         />
                     :
                         <></>

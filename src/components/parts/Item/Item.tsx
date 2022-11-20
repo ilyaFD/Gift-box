@@ -7,7 +7,8 @@ interface IItem {
     name: string
     selectedItemID: string
     setSelectedItemID: (id: string) => void
-    setFocusedItemID: (id: string) => void
+    openDetails: (set_num: string) => void
+    loading: boolean
 };
 
 export const Item: React.FC<IItem> = ({
@@ -16,18 +17,21 @@ export const Item: React.FC<IItem> = ({
     name,
     selectedItemID,
     setSelectedItemID,
-    setFocusedItemID
+    openDetails,
+    loading
 }) => {
 
-    const detailsHendler = (e: React.MouseEvent, set_num: string) => {
-        e.stopPropagation()
-        setFocusedItemID(set_num)
+    const openDetailsHandler = (e: React.MouseEvent, set_num: string) => {
+        if (!loading) {
+            e.stopPropagation()
+            openDetails(set_num)
+        }
     }
     
     return (
         <div
             className={`border border-slate-300 cursor-pointer rounded-2xl overflow-hidden h-92 p-5 flex flex-col ${selectedItemID === set_num ? "outline outline-4 outline-blue-300" : ""}`}
-            onClick={() => setSelectedItemID(set_num)}
+            onClick={() => !loading && setSelectedItemID(set_num)}
         >
             <img
                 className={`h-44 w-full object-contain mb-4 ${!set_img_url ? "opacity-25" : ""}`}
@@ -37,7 +41,7 @@ export const Item: React.FC<IItem> = ({
             <p className="font-bold mb-4 truncate text-slate-600">{name}</p>
             <button
                 className="font-extrabold text-blue-500 uppercase text-xs"
-                onClick={e => detailsHendler(e, set_num)}
+                onClick={e => openDetailsHandler(e, set_num)}
             >
                 Show details
             </button>

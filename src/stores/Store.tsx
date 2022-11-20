@@ -1,6 +1,6 @@
 import React from "react";
 import { makeAutoObservable } from "mobx";
-import { IMinifig } from "../models/";
+import { IMinifig, IPart } from "../types";
 
 export interface IItem {
   id: string;
@@ -9,21 +9,23 @@ export interface IItem {
 export interface IStore {
   items: Array<IMinifig> 
   selectedItemID: string
-  focusedItemID: string
+  openedItemID: string
   setItems: (items: Array<IMinifig>) => void
+  setItemsParts: (setNum: string, parts?: Array<IPart>, partsMessage?: string) => void
   setSelectedItemID: (id: string) => void
-  setFocusedItemID: (id: string) => void
+  setOpenedItemID: (id: string) => void
 }
 
 export class Store implements IStore {
   items = [] as Array<IMinifig>;
   selectedItemID = '';
-  focusedItemID = '';
+  openedItemID = '';
 
   constructor() {
     this.setItems = this.setItems.bind(this)
+    this.setItemsParts = this.setItemsParts.bind(this)
     this.setSelectedItemID = this.setSelectedItemID.bind(this)
-    this.setFocusedItemID = this.setFocusedItemID.bind(this)
+    this.setOpenedItemID = this.setOpenedItemID.bind(this)
     makeAutoObservable(this);
   }
 
@@ -31,12 +33,36 @@ export class Store implements IStore {
     this.items = items
   }
 
+  setItemsParts(setNum: string, parts?: Array<IPart>, partsMessage?: string) {
+    if (partsMessage) {
+      this.items = this.items.map(item => {
+        return item.set_num === setNum && partsMessage ?
+          {
+            ...item,
+            partsMessage: partsMessage
+          }
+        :
+          item
+      })
+    } else {
+      this.items = this.items.map(item => {
+          return item.set_num === setNum && parts ?
+            {
+              ...item,
+              parts: parts
+            }
+          :
+            item
+      })
+    }
+  }
+
   setSelectedItemID(id: string) {
     this.selectedItemID = id
   }
 
-  setFocusedItemID(id: string) {
-    this.focusedItemID = id
+  setOpenedItemID(id: string) {
+    this.openedItemID = id
   }
 }
 

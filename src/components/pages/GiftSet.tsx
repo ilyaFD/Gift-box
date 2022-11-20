@@ -1,46 +1,44 @@
 import React from "react"
-import { NavLink } from "react-router-dom"
-import { IMinifig } from "../../models/"
+import { IMinifig } from "../../types/"
+import { UITitle, UIButton } from "../../components/"
 import { Item } from "../"
 
 interface ITabListProps {
-  title: string
   items: Array<IMinifig>
   selectedItemID: string
   setSelectedItemID: (id: string) => void
-  setFocusedItemID: (id: string) => void
+  openDetails: (set_num: string) => void
+  loading: boolean,
+  message: string
 };
   
 export const GiftSet: React.FC<ITabListProps> = ({
-  title,
   items,
   selectedItemID,
   setSelectedItemID,
-  setFocusedItemID
+  openDetails,
+  loading,
+  message
 }) => {
   return (
-    <div className="p-4 container mx-auto flex justify-center items-center flex-col min-h-screen">
-      <h1 className="text-2xl uppercase font-extrabold mb-16">{title}</h1>
-      <div className="gap-10 columns-3 max-w-4xl mb-16 text-center">
+    <div className="p-4 container mx-auto flex justify-center items-center flex-col min-h-screen text-center ">
+      <UITitle text={(message && message) || "Choose your minifig"} />
+      <div className={`max-w-full mb-4 sm:mb-16 flex flex-col sm:flex-row`}>
         {items.map((item, index) => (
-          <Item
-            key={index + item.set_num}
-            set_num={item.set_num}
-            set_img_url={item.set_img_url}
-            name={item.name}
-            selectedItemID={selectedItemID}
-            setSelectedItemID={setSelectedItemID}
-            setFocusedItemID={setFocusedItemID}
-          />
+          <div className="w-full sm:w-1/3 px-3 mb-6 max-w-xs self-center" key={index + item.set_num}>
+            <Item
+              set_num={item.set_num}
+              set_img_url={item.set_img_url}
+              name={item.name}
+              selectedItemID={selectedItemID}
+              setSelectedItemID={setSelectedItemID}
+              openDetails={openDetails}
+              loading={loading}
+            />
+          </div>
         ))}
       </div>
-      <NavLink
-        to="/order"
-        onClick={(e) => !selectedItemID && e.preventDefault()}
-        className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-12 rounded uppercase ${!selectedItemID ? " bg-slate-300 hover:bg-slate-300 cursor-default" : ""}`}
-      >
-        let's go!
-      </NavLink>
+      <UIButton label="let's go!" url="/order" disabled={!selectedItemID || loading}/>
     </div>
   )
 }
