@@ -11,8 +11,9 @@
 - axios - HTTP client 
 - mobx-react-form - form state
 - react-router-dom - routing
+- tailwindcss - UI library for quick styling
 # Requests
-To search for Harry Potter figurines, I used an endpoint with a search parameter
+To search for Harry Potter figurines, I used an endpoint with a search parameter:
 "https://rebrickable.com/api/v3/lego/minifigs/?search=Harry%20Potter"
 
 Since by design it is required to display the parts of the figurine in the modal window, but the parts of the figurine are not contained in the response, they must be requested separately for each figurine using the following endopoint:
@@ -20,7 +21,7 @@ Since by design it is required to display the parts of the figurine in the modal
 
 To optimize page loading, I determined that parts are best requested when opening a modal window or selecting a figurine. So by clicking on the "Show details" button, or by selecting an element, a check is made whether the Minifigure contains an object with parts, and if not, a request to the server is created.
 
-Order form data sent to fake API
+Order form data sent to fake API:
 https://jsonplaceholder.typicode.com/posts
 # Scripts
 This project was bootstrapped with Create React App. The list of scripts avalible [here](https://github.com/facebook/create-react-app).
