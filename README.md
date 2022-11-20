@@ -16,7 +16,6 @@ To search for Harry Potter figurines, I used an endpoint with a search parameter
 "https://rebrickable.com/api/v3/lego/minifigs/?search=Harry%20Potter"
 
 Since by design it is required to display the parts of the figurine in the modal window, but the parts of the figurine are not contained in the response, they must be requested separately for each figurine using the following endopoint:
-Results are not sufficient to display minifigure details
 "https://rebrickable.com/api/v3/lego/minifigs/{SET_NUM}/parts/"
 
 To optimize page loading, I determined that parts are best requested when opening a modal window or selecting a figurine. So by clicking on the "Show details" button, or by selecting an element, a check is made whether the Minifigure contains an object with parts, and if not, a request to the server is created.
