@@ -6,8 +6,7 @@
 - models - HTTP request functionality
 - types - contains TypeScript types and interfaces used in several places
 # Core packages and languages
-- typescript
-- react
+- typescript - for typing
 - mobx-react - State manager
 - axios - HTTP client 
 - mobx-react-form - form state
