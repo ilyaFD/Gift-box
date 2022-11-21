@@ -9,7 +9,7 @@ function App() {
         <Route element={<Start />} path="/" />
         <Route element={<GiftSetContainer />} path="/gift-set"/>
         <Route element={<OrderContainer />} path="/order"/>
-      </Routes>
+      </Routes> 
     </BrowserRouter>
   );
 }
