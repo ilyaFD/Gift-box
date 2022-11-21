@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Gift-box/static/css/main.ca4ca9dc.css",
+    "main.js": "/Gift-box/static/js/main.99294964.js",
+    "index.html": "/Gift-box/index.html",
+    "main.ca4ca9dc.css.map": "/Gift-box/static/css/main.ca4ca9dc.css.map",
+    "main.99294964.js.map": "/Gift-box/static/js/main.99294964.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ca4ca9dc.css",
+    "static/js/main.99294964.js"
+  ]
+}
